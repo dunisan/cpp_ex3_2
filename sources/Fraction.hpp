@@ -7,12 +7,15 @@
 #include <cmath>
 #include <exception>
 #include <stdexcept>
+#include <limits>
+
 
   
 
 
 
 namespace ariel{
+
 
     class Fraction{
 
@@ -29,9 +32,9 @@ namespace ariel{
             //----------------------------------------
             // constructors
             //----------------------------------------
-            Fraction(int nume, int deno):numerator(nume), denominator(deno){
+            Fraction(int numerator, int denominator):numerator(numerator), denominator(denominator){
 
-                if(deno == 0){
+                if(denominator == 0){
                     throw std::invalid_argument("invalid dinominator!");         
                 }
 
@@ -41,13 +44,25 @@ namespace ariel{
 
             Fraction(float num){
                 if(num==0){
-                    throw std::invalid_argument("invalid number!");         
+                        throw std::invalid_argument("invalid number!");         
                 }
+
+                const float precision = 1000.0; // 3 digits after the decimal point
+                float sign = num < 0 ? -1.0 : 1.0;
+                num = std::abs(num);
+
+                int tmp = static_cast<int>(std::round(num * precision * sign));
+                this->numerator = tmp; 
+                this->denominator = static_cast<int>(precision);  
+
+                this->reduct_frac();                 
             }  
 
             Fraction(): numerator(1), denominator(1){}
 
             Fraction(const Fraction& other): numerator(other.numerator), denominator(other.denominator){}
+
+            ~Fraction() {}
 
 
             //----------------------------------------
@@ -142,9 +157,11 @@ namespace ariel{
             // input 
             friend std::istream& operator>> (std::istream&, Fraction&);
             //-------------------------------------
-    };
 
-    Fraction float_to_fraction(float num);
-    int _gcd(int a, int b); 
+    
+
+    };
+    int _gcd(int, int); 
+    Fraction float_to_fraction(float);
 
 }

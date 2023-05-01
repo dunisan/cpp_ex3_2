@@ -51,41 +51,70 @@ namespace ariel{
     // binary operators
     //----------------------------------------
 
-    // Fraction to fraction 
     Fraction Fraction::operator+(const Fraction& frac){
-        int nume = (this->numerator * frac.denominator) + (this->denominator * frac.numerator);
-        int deno = this->denominator * frac.denominator;
-        Fraction sum(nume, deno); 
-        sum.reduct_frac();  
-        return sum;
-    } 
+    int64_t nume = int64_t(this->numerator) * frac.denominator + int64_t(this->denominator) * frac.numerator;
+    int64_t deno = int64_t(this->denominator) * frac.denominator;
+    if (nume > std::numeric_limits<int>::max() || nume < std::numeric_limits<int>::min() ||
+        deno > std::numeric_limits<int>::max() || deno < std::numeric_limits<int>::min()) {
+        throw std::overflow_error("Overflow in addition");
+    }
+    Fraction sum(static_cast<int>(nume), static_cast<int>(deno)); 
+    sum.reduct_frac();  
+    return sum;
+    }
 
     Fraction Fraction::operator-(const Fraction& frac){
-        int nume = (this->numerator * frac.denominator) - (this->denominator * frac.numerator);
-        int deno = this->denominator * frac.denominator;
-        Fraction subtraction(nume, deno); 
-        subtraction.reduct_frac();  
-        return subtraction;
+    int64_t nume = int64_t(this->numerator) * frac.denominator - int64_t(this->denominator) * frac.numerator;
+    int64_t deno = int64_t(this->denominator) * frac.denominator;
+    if (nume > std::numeric_limits<int>::max() || nume < std::numeric_limits<int>::min() ||
+        deno > std::numeric_limits<int>::max() || deno < std::numeric_limits<int>::min()) {
+        throw std::overflow_error("Overflow in subtraction");
     }
+    Fraction subtraction(static_cast<int>(nume), static_cast<int>(deno)); 
+    subtraction.reduct_frac();  
+    return subtraction;
+}
 
     Fraction Fraction::operator/(const Fraction& frac){
-        if(frac == 0){
-            throw std::runtime_error("divide in 0"); 
-        }
-        int nume = (this->numerator * frac.denominator);
-        int deno = (this->denominator * frac.numerator);
-        Fraction division(nume,deno); 
-        division.reduct_frac();
-        return division;
+    if(frac.numerator == 0){
+        throw std::runtime_error("Division by zero"); 
+    }
+    int64_t nume = int64_t(this->numerator) * frac.denominator;
+    int64_t deno = int64_t(this->denominator) * frac.numerator;
+    if (deno == 0) {
+        throw std::overflow_error("Overflow in division");
+    }
+    if (nume > std::numeric_limits<int>::max() || nume < std::numeric_limits<int>::min() ||
+        deno > std::numeric_limits<int>::max() || deno < std::numeric_limits<int>::min()) {
+        throw std::overflow_error("Overflow in division");
+    }
+    Fraction division(static_cast<int>(nume), static_cast<int>(deno)); 
+    division.reduct_frac();
+    return division;
     }
 
+
     Fraction Fraction::operator*(const Fraction& frac){
-        int nume = (this->numerator * frac.numerator); 
-        int deno = (this->denominator * frac.denominator);
-        Fraction product(nume,deno);
+    
+        // check for overflow in numerator
+        int64_t nume = static_cast<int64_t>(this->numerator) * static_cast<int64_t>(frac.numerator);
+        if (nume > std::numeric_limits<int>::max() || nume < std::numeric_limits<int>::min()) {
+            throw std::overflow_error("multiplication overflow in numerator");
+        }
+
+        // check for overflow in denominator
+        int64_t deno = static_cast<int64_t>(this->denominator) * static_cast<int64_t>(frac.denominator);
+        if (deno > std::numeric_limits<int>::max() || deno < std::numeric_limits<int>::min()) {
+            throw std::overflow_error("multiplication overflow in denominator");
+        }
+            
+        int num = static_cast<int>(nume);
+        int den = static_cast<int>(deno);
+        Fraction product(num, den);
         product.reduct_frac(); 
         return product;
     }
+
     
     // Fraction to float 
     Fraction Fraction::operator+(const float num){
@@ -193,8 +222,12 @@ namespace ariel{
     
     // fraction to fraction 
     bool operator==(const Fraction& frac1, const Fraction& frac2){
+        if(frac1.numerator == 0 && frac2.numerator == 0){
+            return true; 
+        }
         if(frac1.numerator != frac2.numerator || frac1.denominator != frac2.denominator)
             return false; 
+
         return true;
     }
     bool operator>(const Fraction& frac1, const Fraction& frac2){
@@ -286,20 +319,42 @@ namespace ariel{
         return output; 
     }
     std::istream& operator>>(std::istream& input , Fraction& frac){
-        int num1, num2;
-        char space;
+        double new_re = 0, new_im = 0;
+
+        // remember place for rewinding
+        std::ios::pos_type startPosition = input.tellg();
 
         // Read input
-        if (std::cin >> num1 >> space && space == ' ' && std::cin >> num2) {
-            // Input is valid
-            std::cout << "Input is valid: " << num1 << " " << num2 << std::endl;
-        } else {
-            // Input is invalid
-            std::cout << "Input is invalid." << std::endl;
-            throw std::invalid_argument(""); 
-        }
+        if (input >> new_re && input.peek() == ' ' && input.ignore() && input >> new_im) {
+            if(new_im == 0){
+                throw std::runtime_error("invalid denominator"); 
+            }
 
+            if (std::floor(new_re) != new_re || std::floor(new_im) != new_im) {
+                throw std::runtime_error("Invalid input: input must be an integer");
+            }
+
+
+            if(new_im < 0){ 
+                new_re *=  -1;
+                new_im *= -1;
+            }
+                      
+            frac.numerator = new_re; 
+            frac.denominator = new_im; 
+
+            
+
+        } else {
+            // rewind on error
+            auto errorState = input.rdstate(); // remember error state
+            input.clear(); // clear error so seekg will work
+            input.seekg(startPosition); // rewind
+            input.clear(errorState); // set back the error flag
+            throw std::runtime_error("invalid input!"); 
+        }
         
+
         return input;
     }
 
@@ -307,35 +362,35 @@ namespace ariel{
 
 
 
-    int _gcd(int a, int b) {
-    while (b != 0) {
-        int temp = b;
-        b = a % b;
-        a = temp;
+    int _gcd(int first, int second) {
+    while (second != 0) {
+        int temp = second;
+        second = first % second;
+        first = temp;
     }
-    return a;
+    return first;
     }
 
     /*This function is taken from chatGPT for now. hope to build my own*/
     Fraction float_to_fraction(float num) {
-    
-    const int precision = 1000; // 3 digits after the decimal point
-    int sign = num < 0 ? -1 : 1;
-    num = std::abs(num);
+        
+        const int precision = 1000; // 3 digits after the decimal point
+        int sign = num < 0 ? -1 : 1;
+        num = std::abs(num);
+        
+        int nume = round(sign*num*precision);
+        int deno = precision;  
+        int divisor = _gcd(std::abs(nume), std::abs(deno));
 
-    int nume = round(sign*num*precision);
-    int deno = precision;  
-    int divisor = _gcd(std::abs(nume), std::abs(deno));
 
+        nume /= divisor;
+        deno /= divisor; 
 
-    nume /= divisor;
-    deno /= divisor; 
+        Fraction newfrac(nume, deno);
+        // newfrac.reduct_frac(); 
+        return newfrac; 
 
-    Fraction newfrac(nume, deno);
-    // newfrac.reduct_frac(); 
-    return newfrac; 
-
-}
+    }
 
 
 }

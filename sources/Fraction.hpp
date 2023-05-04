@@ -32,14 +32,15 @@ namespace ariel{
             //----------------------------------------
             // constructors
             //----------------------------------------
-            Fraction(int numerator, int denominator):numerator(numerator), denominator(denominator){
+            Fraction(int numerator, const int denominator):numerator(numerator), denominator(denominator){
 
                 if(denominator == 0){
                     throw std::invalid_argument("invalid dinominator!");         
                 }
-
+                
                 this->reduct_frac(); 
             }
+    
 
 
             Fraction(float num){
@@ -60,9 +61,9 @@ namespace ariel{
 
             Fraction(): numerator(1), denominator(1){}
 
-            Fraction(const Fraction& other): numerator(other.numerator), denominator(other.denominator){}
+            // Fraction(const Fraction& other): numerator(other.numerator), denominator(other.denominator){}
 
-            ~Fraction() {}
+            //~Fraction() {}
 
 
             //----------------------------------------

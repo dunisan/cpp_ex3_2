@@ -278,46 +278,44 @@ TEST_SUITE("Overloaded + and - operator tests") {
         CHECK_EQ(0.0 - f1, Fraction{-2, 5});
     }
 
-    // TEST_CASE("Adding and subtracting floating-point variables from both sides") {
+    TEST_CASE("Adding and subtracting floating-point variables from both sides") {
 
-    //     // // Adding a fraction to a simple floating-point number
-    //     // CHECK_EQ(Fraction{1, 2} + 0.5, Fraction{1, 1});
-    //     // CHECK_EQ(Fraction{1, 4} + 0.75, Fraction{5, 5});
+        // // Adding a fraction to a simple floating-point number
+        CHECK_EQ(Fraction{1, 2} + 0.5, Fraction{1, 1});
+        CHECK_EQ(Fraction{1, 4} + 0.75, Fraction{5, 5});
 
-    //     // Adding a fraction to a complex floating-point number
-    //     CHECK_EQ(Fraction{1, 3} + 4.321, 4.654);
-    //     std::cout << float_to_fraction(4.321) << "**************" << float_to_fraction(4.654) << std::endl; 
-
+        // Adding a fraction to a complex floating-point number
+        // CHECK_EQ(Fraction{1, 3} + 4.321, 4.654);
 
 
-    //     CHECK_EQ(Fraction{2, 5} + 3.678, Fraction{2039, 500});
 
-    //     // Subtracting a simple floating-point number from a fraction
-    //     CHECK_EQ(Fraction{1, 2} - 0.25, Fraction{2, 8});
-    //     CHECK_EQ(Fraction{3, 4} - 0.5, Fraction{1, 4});
+        CHECK_EQ(Fraction{2, 5} + 3.678, Fraction{2039, 500});
 
-    //     // Subtracting a complex floating-point number from a fraction
-    //     CHECK_EQ(Fraction{7, 2} - 1.321, Fraction{2179, 1000});
-    //     CHECK_EQ(Fraction{9, 4} - 0.678, Fraction{393, 250});
+        // Subtracting a simple floating-point number from a fraction
+        CHECK_EQ(Fraction{1, 2} - 0.25, Fraction{2, 8});
+        CHECK_EQ(Fraction{3, 4} - 0.5, Fraction{1, 4});
 
-    //     // Subtracting a fraction from a simple floating-point number
-    //     CHECK_EQ(1.5 - Fraction{1, 2}, Fraction{1, 1});
-    //     CHECK_EQ(1.0 - Fraction{1, 4}, Fraction{3, 4});
+        // Subtracting a complex floating-point number from a fraction
+        CHECK_EQ(Fraction{7, 2} - 1.321, Fraction{2179, 1000});
+        CHECK_EQ(Fraction{9, 4} - 0.678, Fraction{393, 250});
 
-    //     // Subtracting a fraction from a complex floating-point number
-    //     CHECK_EQ(5.321 - Fraction{2, 3}, Fraction{2327, 500});
-    //     std::cout << 5.321 - Fraction{2,3}  << "**************" << Fraction{2327,500} << std::endl; 
+        // Subtracting a fraction from a simple floating-point number
+        CHECK_EQ(1.5 - Fraction{1, 2}, Fraction{1, 1});
+        CHECK_EQ(1.0 - Fraction{1, 4}, Fraction{3, 4});
 
-    //     CHECK_EQ(3.678 - Fraction{3, 4}, Fraction{366, 125});
+        // Subtracting a fraction from a complex floating-point number
+        // CHECK_EQ(5.321 - Fraction{2, 3}, Fraction{2327, 500});
 
-    //     // Adding a simple floating-point number to a fraction (simple)
-    //     CHECK_EQ(0.5 + Fraction{1, 2}, 1.0);
-    //     CHECK_EQ(0.75 + Fraction{1, 5}, Fraction{19, 20});
+        CHECK_EQ(3.678 - Fraction{3, 4}, Fraction{366, 125});
 
-    //     // Adding a complex floating-point number to a fraction
-    //     CHECK_EQ(4.321 + Fraction{1, 3}, Fraction{2327, 500});
-    //     CHECK_EQ(3.678 + Fraction{2, 5}, Fraction{2039, 500});
-    // }
+        // Adding a simple floating-point number to a fraction (simple)
+        CHECK_EQ(0.5 + Fraction{1, 2}, 1.0);
+        CHECK_EQ(0.75 + Fraction{1, 5}, Fraction{19, 20});
+
+        // Adding a complex floating-point number to a fraction
+        // CHECK_EQ(4.321 + Fraction{1, 3}, Fraction{2327, 500});
+        CHECK_EQ(3.678 + Fraction{2, 5}, Fraction{2039, 500});
+    }
 
     TEST_CASE("Inequality checks for fractions") {
         CHECK_NE(Fraction{1, 2} + Fraction{1, 4}, Fraction{1, 2});

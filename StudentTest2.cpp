@@ -83,7 +83,6 @@ TEST_SUITE("Overloaded == operator tests") {
 
 TEST_SUITE("Overloaded <= and >= operators tests") {
     TEST_CASE("Fraction comparisons") {
-
         Fraction frac1{2, 3};
         Fraction frac2{1, 2};
         Fraction frac3{5, 6};
@@ -95,7 +94,6 @@ TEST_SUITE("Overloaded <= and >= operators tests") {
         Fraction frac9{0, 1};
         Fraction frac10{7, 5};
         Fraction frac11{4,3};
-
 
         SUBCASE(">= operator test") {
             CHECK_GE(frac1, frac2);
@@ -198,7 +196,6 @@ TEST_SUITE("Overloaded < and > operators tests") {
         };
 
         for (size_t i = 0; i < fracs.size(); i++) {
-
             CHECK_LT(fracs[i].first, fracs[i].second);
             CHECK_FALSE((fracs[i].second < fracs[i].first));
             CHECK_GT(fracs[i].second, fracs[i].first);
@@ -280,15 +277,12 @@ TEST_SUITE("Overloaded + and - operator tests") {
 
     TEST_CASE("Adding and subtracting floating-point variables from both sides") {
 
-        // // Adding a fraction to a simple floating-point number
+        // Adding a fraction to a simple floating-point number
         CHECK_EQ(Fraction{1, 2} + 0.5, Fraction{1, 1});
         CHECK_EQ(Fraction{1, 4} + 0.75, Fraction{5, 5});
 
         // Adding a fraction to a complex floating-point number
-        // CHECK_EQ(Fraction{1, 3} + 4.321, 4.654);
-
-
-
+        CHECK_EQ(Fraction{1, 3} + 4.321, Fraction{13963, 3000});
         CHECK_EQ(Fraction{2, 5} + 3.678, Fraction{2039, 500});
 
         // Subtracting a simple floating-point number from a fraction
@@ -304,8 +298,7 @@ TEST_SUITE("Overloaded + and - operator tests") {
         CHECK_EQ(1.0 - Fraction{1, 4}, Fraction{3, 4});
 
         // Subtracting a fraction from a complex floating-point number
-        // CHECK_EQ(5.321 - Fraction{2, 3}, Fraction{2327, 500});
-
+        CHECK_EQ(5.321 - Fraction{2, 3}, Fraction{13963, 3000});
         CHECK_EQ(3.678 - Fraction{3, 4}, Fraction{366, 125});
 
         // Adding a simple floating-point number to a fraction (simple)
@@ -313,7 +306,7 @@ TEST_SUITE("Overloaded + and - operator tests") {
         CHECK_EQ(0.75 + Fraction{1, 5}, Fraction{19, 20});
 
         // Adding a complex floating-point number to a fraction
-        // CHECK_EQ(4.321 + Fraction{1, 3}, Fraction{2327, 500});
+        CHECK_EQ(4.321 + Fraction{1, 3},  Fraction{13963, 3000});
         CHECK_EQ(3.678 + Fraction{2, 5}, Fraction{2039, 500});
     }
 
@@ -513,7 +506,6 @@ TEST_SUITE("Overloaded / operator tests") {
 TEST_SUITE("Chaining operations and field characteristics") {
 
     TEST_CASE("Chaining mixed operations with floating-point numbers") {
-
         CHECK_EQ(Fraction{1, 3} * 3.0 + Fraction{1, 2}, Fraction{3, 2});
         CHECK_NE(Fraction{1, 3} * 3.0 + Fraction{1, 2}, Fraction{7, 2});
 

@@ -368,6 +368,8 @@ namespace ariel{
                       
             frac.numerator = new_nume; 
             frac.denominator = new_deno; 
+
+            frac.reduct_frac();
         } else {
             throw std::runtime_error("invalid input!"); 
         }

@@ -137,17 +137,17 @@ TEST_CASE("Arithmetic operations"){
 TEST_CASE("Increment & decrement"){
     SUBCASE("Increment") {
         Fraction a(10, 2);
-        CHECK(++a == Fraction(6, 1)); // Pre-increment
-        CHECK(a++ == Fraction(6, 1)); // Post-increment 
-        CHECK(a == Fraction(7, 1));   // After post-increment
+        CHECK(++a == Fraction(6, 1)); // Pre
+        CHECK(a++ == Fraction(6, 1)); // Post
+        CHECK(a == Fraction(7, 1));   // After
     }
 
     SUBCASE("Decrement") {
         Fraction a(10, 2);
 
-        CHECK(--a == Fraction(4, 1)); // Pre-decrement
-        CHECK(a-- == Fraction(4, 1)); // Post-decrement (value before decrement)
-        CHECK(a == Fraction(3, 1));   // After post-decrement
+        CHECK(--a == Fraction(4, 1)); // Pre
+        CHECK(a-- == Fraction(4, 1)); // Post
+        CHECK(a == Fraction(3, 1));   // After
     }
 }
 
